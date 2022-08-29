@@ -74,17 +74,16 @@ class PhoneFixtures extends Fixture
         ]
     ];
 
-    /**
-     * Load fixtures in phone table
-     *
-     * @param ObjectManager $manager
-     * @return void
-     */
+    
     public function load(ObjectManager $manager): void
     {
         
         foreach($this->data as $row)
         {
+            $i = rand(0, 9);
+            $customer = $this->getReference(CustomerFixtures::CUSTOMER_REFERENCE . 'customer_' . $i);
+
+
             $phone = (new Phone())
                 ->setBrand($row['brand'])
                 ->setDescription($row['description'])
@@ -94,8 +93,8 @@ class PhoneFixtures extends Fixture
                 ->setNfc($row['nfc'])
                 ->setModel($row['model'])
                 ->setResolution($row['resolution'])
-                ->setStorage($row['storage']);
-                
+                ->setStorage($row['storage'])
+                ->setCustomer($customer);
 
             $manager->persist($phone);    
         }    
