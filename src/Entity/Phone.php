@@ -5,49 +5,64 @@ namespace App\Entity;
 use App\Repository\PhoneRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PhoneRepository::class)]
 class Phone
-{
+{ 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    
+    #[Groups(["getPhones","getCustomers"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 150)]
+    #[Groups(["getPhones","getCustomers"])]
     private ?string $brand = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(["getPhones","getCustomers"])]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Groups(["getPhones","getCustomers"])]
     private ?float $price = null;
 
     #[ORM\Column(length: 45)]
+    #[Groups(["getPhones","getCustomers"])]
     private ?string $color = null;
 
     #[ORM\Column]
+    #[Groups(["getPhones","getCustomers"])]
     private ?float $weight = null;
 
     #[ORM\Column]
+    #[Groups(["getPhones","getCustomers"])]
     private ?bool $nfc = null;
 
     #[ORM\Column(length: 150)]
+    #[Groups(["getPhones","getCustomers"])]
     private ?string $model = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(["getPhones","getCustomers"])]
     private ?string $resolution = null;
 
     #[ORM\Column(length: 45)]
+    #[Groups(["getPhones","getCustomers"])]
     private ?string $storage = null;
 
     #[ORM\Column(type: 'datetime_immutable', 
     options: ['default' => 'CURRENT_TIMESTAMP'])]
     private $createdAt;
-    // private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $uodatedAt = null;
+    private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'phones')]
+    #[Groups(["getPhones"])]
+    private ?Customer $customer = null;
 
     
     public function __construct()
@@ -181,14 +196,26 @@ class Phone
         return $this;
     }
 
-    public function getUodatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
-        return $this->uodatedAt;
+        return $this->updatedAt;
     }
 
-    public function setUodatedAt(?\DateTimeImmutable $uodatedAt): self
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
     {
-        $this->uodatedAt = $uodatedAt;
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getCustomer(): ?Customer
+    {
+        return $this->customer;
+    }
+
+    public function setCustomer(?Customer $customer): self
+    {
+        $this->customer = $customer;
 
         return $this;
     }
